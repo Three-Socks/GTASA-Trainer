@@ -1,0 +1,261 @@
+Player player;
+Player player3;
+Player player4;
+Player player5;
+Player player6;
+Actor player7;
+
+start thread main
+{
+	// Dummys
+	player;
+	player3;
+	player4;
+	player5;
+	player6;
+	player7;
+	
+	DISPLAY_RADAR(false);
+	DISPLAY_RADAR(false);
+	
+	if (IS_BUTTON_PRESSED(0, 8))
+	{
+		if (GET_NUMBER_OF_SCRIPT_INSTANCES_OF_STREAMED_SCRIPT(trainer3s1) == 0)
+		{
+			REQUEST_SCRIPT(trainer3s1);
+			while (!HAS_SCRIPT_LOADED(trainer3s1))
+			{ 
+				WAIT(0);
+			}
+			RUN_SCRIPT(trainer3s1);
+		}
+	}
+	
+	DISPLAY_RADAR(false);
+	DISPLAY_RADAR(false);
+}
+
+external thread trainer3s1
+{
+	int menu, menu_level, item_selected;
+
+	int last_selected[5];
+	Model menu_item_model[12];
+	Car v_spawn;
+	bool disable_menu, menu_items_set, menu_action, menu_forward_pressed, menu_back_pressed;
+	//short string menu_header;
+
+	//menu_header = "TS_MAIN";
+	menu_level = 1;
+
+	LOAD_MISSION_TEXT("T3S");
+	SET_DEATHARREST_STATE(false);
+	SET_PLAYER_CONTROL(player6, false);
+	BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
+	DISPLAY_RADAR(false);
+	SHOW_UPDATE_STATS(false);
+	CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
+	SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
+
+	while (true)
+	{
+		wait(0);
+
+		if (!disable_menu)
+		{
+			//project_set
+			if (!menu_items_set)
+			{
+				int mainMenu = last_selected[1];
+				int subMenu = last_selected[2]; 
+	
+				menu_items_set = true;
+	
+				// Main
+				if (menu_level == 1)
+				{
+					//menu_header = "TS_MAIN";
+					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_PLAY", "TS_VEHI", "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+				}
+				// Player
+				else if (mainMenu == 1)
+				{
+					if (menu_level == 2)
+					{
+						//menu_header = "TS_PLAY";
+						SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_MODL", "TS_APPR", "TS_ACCS", "TS_WEAP", "TS_HETH", "TS_WANT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+					}
+				}
+				// Vehicle
+				else if (mainMenu == 2)
+				{
+					if (menu_level == 2)
+					{
+						//menu_header = "TS_VEHI";
+						SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_SPWN", "TS_UPGR", "TS_COLR", "TS_MODF", "TS_FXNW", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+					}
+					else if (menu_level == 3)
+					{
+						if (subMenu == 1)
+						{
+							//menu_header = "TS_SPWN";
+							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_SPOR", "TS_4WDU", "TS_LOWR", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");						
+						}
+					}
+					else if (menu_level == 4)
+					{
+						if (last_selected[3] == 1)
+						{
+							menu_action = true;
+							menu_item_model[0] = %ALPHA;
+							menu_item_model[1] = %BANSHEE;
+							menu_item_model[2] = %BLOODRA;
+							menu_item_model[3] = %BUFFALO;
+							menu_item_model[4] = %BULLET;
+							SET_MENU_COLUMN(menu, 0, "DUMMY", "ALPHA", "BANSHEE", "BLOODRA", "BUFFALO", "BULLET", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");	
+						}
+					}
+				}
+				// Exit
+				else if (mainMenu == 3)
+				{
+					SET_PLAYER_CONTROL(player6, true);
+					BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(false);
+					DISPLAY_RADAR(true);
+					SHOW_UPDATE_STATS(true);
+					DELETE_MENU(menu);
+					//TERMINATE_SCRIPT(trainer3s1);
+					disable_menu = true;
+				}
+			}
+	
+			if (menu_forward_pressed && !IS_BUTTON_PRESSED(0, player3))
+			{
+				int mainMenu = last_selected[1];
+				//int subMenu = last_selected[2]; 
+				menu_forward_pressed = false;
+				if (menu_action)
+				{
+					menu_action = false;
+					menu_items_set = false;
+					int action_item_selected = GET_MENU_ITEM_SELECTED(menu);
+	
+					// Vehicle
+					if (mainMenu == 2)
+					{
+						if (menu_level == 4)
+						{
+							if (IS_CHAR_IN_ANY_CAR(player7))
+								GET_CAR_CHAR_IS_USING(player7, v_spawn);
+	
+							float curSpeed, curHeading, curX, curY, curZ;
+	
+							if (DOES_VEHICLE_EXIST(v_spawn))
+							{
+								curSpeed = GET_CAR_SPEED(v_spawn);
+								GET_CAR_HEADING(v_spawn, curHeading);
+								GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
+								WARP_CHAR_FROM_CAR_TO_COORD(player7, curX, curY, curZ);
+								DELETE_CAR(v_spawn);
+							}
+							else
+							{
+								GET_CHAR_HEADING(player7, curHeading);
+								GET_CHAR_COORDINATES(player7, curX, curY, curZ);
+							}
+	
+							REQUEST_MODEL(menu_item_model[action_item_selected]);
+							while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
+								WAIT(0);
+							v_spawn = CREATE_CAR(menu_item_model[action_item_selected], 0, 0, 0);
+							WARP_CHAR_INTO_CAR(player7, v_spawn);
+							SET_CAR_HEADING(v_spawn, curHeading);
+							SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
+						
+							SET_CAR_ENGINE_ON(v_spawn, true);
+						
+							if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
+								SET_HELI_BLADES_FULL_SPEED(v_spawn);
+						
+							MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
+						
+							eLocation wLocation;
+							GET_INTERIOR_FROM_CHAR(player7, wLocation);
+	
+							if (wLocation != 0)
+							{
+								float cGroundZ;
+								cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
+								SET_CHAR_COORDINATES_NO_OFFSET(player7, curX, curY, cGroundZ);
+								LOAD_SCENE(curX, curY, curZ);
+								SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
+							}
+							
+							if (curSpeed != 0)
+								SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+						}
+					}
+				}
+				else
+				{
+					item_selected = GET_MENU_ITEM_SELECTED(menu) + 1;
+					menu_items_set = false;
+					last_selected[menu_level] = item_selected;
+					SET_SELECTED_MENU_ITEM(menu, 0);
+					menu_level = menu_level + 1;
+				}
+			}
+	
+			if (menu_back_pressed && !IS_BUTTON_PRESSED(0, player))
+			{
+				menu_back_pressed = false;
+				if (menu_level != 1)
+				{
+					menu_items_set = false;
+					menu_level = menu_level - 1;
+					int last_menu_level = menu_level - 1;
+					SET_SELECTED_MENU_ITEM(menu, 0);
+					item_selected = last_selected[last_menu_level];
+				}
+				//else
+				//{
+					//menu_core_shutdown();
+					//menu_level = 0;
+				//}
+			}
+	
+			//SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 3, "PLA_10", GET_MENU_ITEM_SELECTED(menu), GET_MENU_ITEM_ACCEPTED(menu));
+			//SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 4, "PLA_10", item_selected, last_selected[menu_level - 1]);
+			//SET_MENU_ITEM_WITH_2_NUMBERS(debug_menu, 0, 3, "PLA_10", menu_items_set, menu_action);
+			/*SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 1, "DOLLAR", GET_MENU_ITEM_SELECTED(menu));
+			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 2, "DOLLAR", GET_MENU_ITEM_ACCEPTED(menu));
+			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 3, "DOLLAR", item_selected);
+			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 4, "DOLLAR", last_selected[menu_level - 1]);
+			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 5, "DOLLAR", menu_level);*/
+			//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "DOLLAR", menu_level);
+		
+			if (IS_BUTTON_PRESSED(0, player3))
+				menu_forward_pressed = true;
+			else if (IS_BUTTON_PRESSED(0, player))
+				menu_back_pressed = true;
+		}
+		else
+		{
+			if (IS_BUTTON_PRESSED(0, 8))
+			{
+				disable_menu = false;
+				menu_items_set = false;
+				menu_level = 1;
+
+				LOAD_MISSION_TEXT("T3S");
+				SET_DEATHARREST_STATE(false);
+				SET_PLAYER_CONTROL(player6, false);
+				BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
+				DISPLAY_RADAR(false);
+				SHOW_UPDATE_STATS(false);
+				CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
+				SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
+			}
+		}
+	}
+}
