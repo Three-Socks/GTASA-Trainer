@@ -1,45 +1,46 @@
 Player player;
-Player player3;
-Player player4;
-Player player5;
-Player player6;
-Actor player7;
+Actor playerActor;
+//Group playerGroup;
 
-start thread main
-{
-	// Dummys
-	player;
-	player3;
-	player4;
-	player5;
-	player6;
-	player7;
+start thread main {
+	SET_TOTAL_NUMBER_OF_MISSIONS(1);
+	SET_MAX_PROGRESS(1);
+	SET_MAX_WANTED_LEVEL(6);
+	SET_DEATHARREST_STATE(false);
+	SET_TIME_OF_DAY(12,0);
+	REQUEST_COLLISION(1952.0, -2472.0);
+	LOAD_SCENE(1952.0, -2472.0, 13.0);
+
+	//SET_FLOAT_STAT(165, 800.0);
+	//SET_FLOAT_STAT(23, 800.0);
+	//SET_FLOAT_STAT(21, 200.0);
+	//SET_FLOAT_STAT(160, 200.0);
+	player = CREATE_PLAYER(PedPlayer2, 1952.0, -2472.0, 13.0);
+	//playerGroup = player.Group;
+	playerActor = GET_PLAYER_CHAR(player);
+	SET_PLAYER_SKIN_BY_NAME(player, "VEST", "VEST", 0);
+	SET_PLAYER_SKIN_BY_NAME(player, "JEANSDENIM", "JEANS", 2);
+	SET_PLAYER_SKIN_BY_NAME(player, "SNEAKERBINCBLK", "SNEAKER", 3);
+	SET_PLAYER_SKIN_BY_NAME(player, "PLAYER_FACE", "HEAD", 1);
+	REBUILD_PLAYER(player);
+
+	FORCE_WEATHER_NOW(1);
+	SET_CAMERA_BEHIND_PLAYER();
+	SET_CHAR_HEADING(playerActor, 180.0);
+	SET_AREA_VISIBLE(LocOutside);
+	SET_PLAYER_CONTROL(player, true);
+	RELEASE_WEATHER();
+	DO_FADE(1000,1);
+	WAIT(100);
+	CLEAR_HELP();
 	
-	DISPLAY_RADAR(false);
-	DISPLAY_RADAR(false);
-	
-	if (IS_BUTTON_PRESSED(0, 8))
-	{
-		if (GET_NUMBER_OF_SCRIPT_INSTANCES_OF_STREAMED_SCRIPT(trainer3s1) == 0)
-		{
-			REQUEST_SCRIPT(trainer3s1);
-			while (!HAS_SCRIPT_LOADED(trainer3s1))
-			{ 
-				WAIT(0);
-			}
-			RUN_SCRIPT(trainer3s1);
-		}
-	}
-	
-	DISPLAY_RADAR(false);
-	DISPLAY_RADAR(false);
+	LOAD_AND_LAUNCH_MISSION(TRAINER3S);
 }
 
-external thread trainer3s1
-{
+mission TRAINER3S {
 	int menu, menu_level, item_selected;
 
-	int last_selected[5];
+	int last_selected[6];
 	Model menu_item_model[12];
 	Car v_spawn;
 	bool disable_menu, menu_items_set, menu_action, menu_forward_pressed, menu_back_pressed;
@@ -47,19 +48,34 @@ external thread trainer3s1
 
 	//menu_header = "TS_MAIN";
 	menu_level = 1;
+	disable_menu = true;
 
-	LOAD_MISSION_TEXT("T3S");
+	/*LOAD_MISSION_TEXT("T3S");
 	SET_DEATHARREST_STATE(false);
-	SET_PLAYER_CONTROL(player6, false);
+	SET_PLAYER_CONTROL(player, false);
 	BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
 	DISPLAY_RADAR(false);
 	SHOW_UPDATE_STATS(false);
 	CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
-	SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
+	SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);*/
 
 	while (true)
 	{
 		wait(0);
+
+		float x, y, z, h, pos_x = 5.0, width = 0.5, height = 1.0;
+		int r = 255, g = 255, b = 255, a = 110;
+		GET_CHAR_COORDINATES(playerActor, x, y, z);
+		GET_CHAR_HEADING(playerActor, h);
+		
+		set_up_draw(2, width, height, r, g, b, a);
+		draw_float("BJ_0", pos_x, 15.0, x);
+		set_up_draw(2, width, height, r, g, b, a);
+		draw_float("BJ_0", pos_x, 25.0, y);
+		set_up_draw(2, width, height, r, g, b, a);
+		draw_float("BJ_0", pos_x, 35.0, z);
+		set_up_draw(2, width, height, r, g, b, a);
+		draw_float("BJ_0", pos_x, 45.0, h);
 
 		if (!disable_menu)
 		{
@@ -75,7 +91,7 @@ external thread trainer3s1
 				if (menu_level == 1)
 				{
 					//menu_header = "TS_MAIN";
-					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_PLAY", "TS_VEHI", "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_PLAY", "TS_VEHI",  "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 				}
 				// Player
 				else if (mainMenu == 1)
@@ -99,12 +115,21 @@ external thread trainer3s1
 						if (subMenu == 1)
 						{
 							//menu_header = "TS_SPWN";
-							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_SPOR", "TS_4WDU", "TS_LOWR", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");						
+							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_AIRV", "TS_LVEH", "TS_SVEH", "TS_MVEH", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 						}
 					}
 					else if (menu_level == 4)
 					{
 						if (last_selected[3] == 1)
+						{
+							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_AIRP", "TS_HELI", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+						}
+						else if (last_selected[3] == 2)
+						{
+							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_BIKE", "TS_COVT", "TS_IDST", "TS_LOWR", "TS_OROD", "TS_PUBS", "TS_SALO", "TS_SPOR", "TS_SWAG", "DUMMY", "DUMMY", "DUMMY");
+						}
+
+						/*if (last_selected[3] == 1)
 						{
 							menu_action = true;
 							menu_item_model[0] = %ALPHA;
@@ -113,23 +138,85 @@ external thread trainer3s1
 							menu_item_model[3] = %BUFFALO;
 							menu_item_model[4] = %BULLET;
 							SET_MENU_COLUMN(menu, 0, "DUMMY", "ALPHA", "BANSHEE", "BLOODRA", "BUFFALO", "BULLET", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");	
+						}*/
+					}
+					else if (menu_level == 5)
+					{
+						/**********************************
+									Air Vehicles
+						**********************************/
+						if (last_selected[3] == 1)
+						{
+							if (last_selected[4] == 1)
+							{
+								menu_action = true;
+								menu_item_model[0] = %SKIMMER;
+								menu_item_model[1] = %RUSTLER;
+								menu_item_model[2] = %BEAGLE;
+								menu_item_model[3] = %CROPDUST;
+								menu_item_model[4] = %STUNT;
+								menu_item_model[5] = %SHAMAL;
+								menu_item_model[6] = %HYDRA;
+								menu_item_model[7] = %NEVADA;
+								menu_item_model[8] = %AT400;
+								menu_item_model[9] = %ANDROM;
+								menu_item_model[10] = %DODO;
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "SKIMMER", "RUSTLER", "BEAGLE", "CROPDST", "STUNT", "SHAMAL", "HYDRA", "NEVADA", "AT400", "ANDROM", "DODO", "DUMMY");
+							}
+							else if (last_selected[4] == 2)
+							{
+								menu_action = true;
+								menu_item_model[0] = %CARGOBOB;
+								menu_item_model[1] = %HUNTER;
+								menu_item_model[2] = %LEVIATHN;
+								menu_item_model[3] = %MAVERICK;
+								menu_item_model[4] = %VCNMAV;
+								menu_item_model[5] = %POLMAV;
+								menu_item_model[6] = %RAINDANC;
+								menu_item_model[7] = %SEASPAR;
+								menu_item_model[8] = %SPARROW;
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "CARGOBB", "HUNTER", "LEVIATH", "MAVERIC", "SANMAV", "POLMAV", "RAINDNC", "SEASPAR", "SPARROW", "DUMMY", "DUMMY", "DUMMY");
+							}
+						}
+						/**********************************
+									Land Vehicles
+						**********************************/
+						else if (last_selected[3] == 2)
+						{
+							if (last_selected[4] == 1)
+							{
+								menu_action = true;
+								menu_item_model[0] = %BIKE;
+								menu_item_model[1] = %BMX;
+								menu_item_model[2] = %MTBIKE;
+								menu_item_model[3] = %FAGGIO;
+								menu_item_model[4] = %PIZZABOY;
+								menu_item_model[5] = %BF400;
+								menu_item_model[6] = %NRG500;
+								menu_item_model[7] = %PCJ600;
+								menu_item_model[8] = %FCR900;
+								menu_item_model[9] = %COPBIKE;
+								menu_item_model[10] = %FREEWAY;
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "BIKE", "BMX", "MTBIKE", "FAGGIO", "PIZZABO", "BF400", "NRG500", "PCJ600", "FCR900", "HPV1000", "FREEWAY", "TS_NEXT");
+							}
 						}
 					}
-				}
+				}			
 				// Exit
 				else if (mainMenu == 3)
 				{
-					SET_PLAYER_CONTROL(player6, true);
+					SET_PLAYER_CONTROL(player, true);
+					RESTORE_CAMERA_JUMPCUT();
 					BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(false);
 					DISPLAY_RADAR(true);
 					SHOW_UPDATE_STATS(true);
+					disable_menu = true;
 					DELETE_MENU(menu);
 					//TERMINATE_SCRIPT(trainer3s1);
-					disable_menu = true;
 				}
 			}
 	
-			if (menu_forward_pressed && !IS_BUTTON_PRESSED(0, player3))
+			if (menu_forward_pressed && !IS_BUTTON_PRESSED(0, 16))
 			{
 				int mainMenu = last_selected[1];
 				//int subMenu = last_selected[2]; 
@@ -143,56 +230,65 @@ external thread trainer3s1
 					// Vehicle
 					if (mainMenu == 2)
 					{
-						if (menu_level == 4)
+						if (menu_level == 5)
 						{
-							if (IS_CHAR_IN_ANY_CAR(player7))
-								GET_CAR_CHAR_IS_USING(player7, v_spawn);
-	
-							float curSpeed, curHeading, curX, curY, curZ;
-	
-							if (DOES_VEHICLE_EXIST(v_spawn))
+							if (IS_MODEL_IN_CDIMAGE(menu_item_model[action_item_selected]))
 							{
-								curSpeed = GET_CAR_SPEED(v_spawn);
-								GET_CAR_HEADING(v_spawn, curHeading);
-								GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-								WARP_CHAR_FROM_CAR_TO_COORD(player7, curX, curY, curZ);
-								DELETE_CAR(v_spawn);
-							}
-							else
-							{
-								GET_CHAR_HEADING(player7, curHeading);
-								GET_CHAR_COORDINATES(player7, curX, curY, curZ);
-							}
-	
-							REQUEST_MODEL(menu_item_model[action_item_selected]);
-							while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
-								WAIT(0);
-							v_spawn = CREATE_CAR(menu_item_model[action_item_selected], 0, 0, 0);
-							WARP_CHAR_INTO_CAR(player7, v_spawn);
-							SET_CAR_HEADING(v_spawn, curHeading);
-							SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-						
-							SET_CAR_ENGINE_ON(v_spawn, true);
-						
-							if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
-								SET_HELI_BLADES_FULL_SPEED(v_spawn);
-						
-							MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
-						
-							eLocation wLocation;
-							GET_INTERIOR_FROM_CHAR(player7, wLocation);
-	
-							if (wLocation != 0)
-							{
-								float cGroundZ;
-								cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
-								SET_CHAR_COORDINATES_NO_OFFSET(player7, curX, curY, cGroundZ);
-								LOAD_SCENE(curX, curY, curZ);
-								SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
-							}
+								if (IS_CHAR_IN_ANY_CAR(playerActor))
+									GET_CAR_CHAR_IS_USING(playerActor, v_spawn);
+		
+								float curHeading, curX, curY, curZ;
+		
+								if (DOES_VEHICLE_EXIST(v_spawn))
+								{
+									//curSpeed = GET_CAR_SPEED(v_spawn);
+									GET_CAR_HEADING(v_spawn, curHeading);
+									GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
+									WARP_CHAR_FROM_CAR_TO_COORD(playerActor, curX, curY, curZ);
+									DELETE_CAR(v_spawn);
+								}
+								else
+								{
+									GET_CHAR_HEADING(playerActor, curHeading);
+									GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+								}
+		
+								REQUEST_MODEL(menu_item_model[action_item_selected]);
+								while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
+									WAIT(0);
+								v_spawn = CREATE_CAR(menu_item_model[action_item_selected], curX, curY, curZ);
+								WARP_CHAR_INTO_CAR(playerActor, v_spawn);
+								SET_CAR_HEADING(v_spawn, curHeading);
+								SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
 							
-							if (curSpeed != 0)
-								SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+								SET_CAR_ENGINE_ON(v_spawn, true);
+							
+								if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
+									SET_HELI_BLADES_FULL_SPEED(v_spawn);
+							
+								MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
+
+								//float curX, curY, curZ;
+								//GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+				
+								SET_FIXED_CAMERA_POSITION(curX - 4.8634, curY - 2.832, curZ + 1.9727, 0.0, 0.0, 0.0);
+								POINT_CAMERA_AT_POINT(curX - 3.9654, curY - 2.4352, curZ + 1.7829, 2);
+
+								/*eLocation wLocation;
+								GET_INTERIOR_FROM_CHAR(playerActor, wLocation);
+		
+								if (wLocation != 0)
+								{
+									float cGroundZ;
+									cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
+									SET_CHAR_COORDINATES_NO_OFFSET(playerActor, curX, curY, cGroundZ);
+									LOAD_SCENE(curX, curY, curZ);
+									SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
+								}*/
+								
+								//if (curSpeed != 0)
+									//SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+							}
 						}
 					}
 				}
@@ -206,9 +302,10 @@ external thread trainer3s1
 				}
 			}
 	
-			if (menu_back_pressed && !IS_BUTTON_PRESSED(0, player))
+			if (menu_back_pressed && !IS_BUTTON_PRESSED(0, 15))
 			{
 				menu_back_pressed = false;
+				menu_action = false;
 				if (menu_level != 1)
 				{
 					menu_items_set = false;
@@ -223,7 +320,7 @@ external thread trainer3s1
 					//menu_level = 0;
 				//}
 			}
-	
+		
 			//SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 3, "PLA_10", GET_MENU_ITEM_SELECTED(menu), GET_MENU_ITEM_ACCEPTED(menu));
 			//SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 4, "PLA_10", item_selected, last_selected[menu_level - 1]);
 			//SET_MENU_ITEM_WITH_2_NUMBERS(debug_menu, 0, 3, "PLA_10", menu_items_set, menu_action);
@@ -234,9 +331,9 @@ external thread trainer3s1
 			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 5, "DOLLAR", menu_level);*/
 			//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "DOLLAR", menu_level);
 		
-			if (IS_BUTTON_PRESSED(0, player3))
+			if (IS_BUTTON_PRESSED(0, 16))
 				menu_forward_pressed = true;
-			else if (IS_BUTTON_PRESSED(0, player))
+			else if (IS_BUTTON_PRESSED(0, 15))
 				menu_back_pressed = true;
 		}
 		else
@@ -247,15 +344,67 @@ external thread trainer3s1
 				menu_items_set = false;
 				menu_level = 1;
 
-				LOAD_MISSION_TEXT("T3S");
+				//LOAD_MISSION_TEXT("T3S");
 				SET_DEATHARREST_STATE(false);
-				SET_PLAYER_CONTROL(player6, false);
+				SET_PLAYER_CONTROL(player, false);
 				BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
 				DISPLAY_RADAR(false);
 				SHOW_UPDATE_STATS(false);
 				CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
 				SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
+
+				float curX, curY, curZ;
+				GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+
+				SET_FIXED_CAMERA_POSITION(curX - 4.8634, curY - 2.832, curZ + 1.9727, 0.0, 0.0, 0.0);
+				POINT_CAMERA_AT_POINT(curX - 3.9654, curY - 2.4352, curZ + 1.7829, 2);
 			}
 		}
+	}
+
+	function set_up_draw(int type, float width, float height, int r, int g, int b, int a)
+	{
+		USE_TEXT_COMMANDS(true);
+		SET_TEXT_FONT(2);
+	
+		SET_TEXT_BACKGROUND(0);
+		SET_TEXT_DROPSHADOW(0, 0, 0, 0, 255);
+		SET_TEXT_EDGE(0, 0, 0, 0, 255);
+		
+		if (type == 1)
+		{
+			SET_TEXT_BACKGROUND(1);
+		}
+		else if (type == 2)
+		{
+			SET_TEXT_DROPSHADOW(1, 0, 0, 0, 255);
+		}
+		else if (type == 3)
+		{
+			SET_TEXT_EDGE(1, 0, 0, 0, 255);
+		}
+		
+		SET_TEXT_COLOUR(r, g, b, a);
+		SET_TEXT_SCALE(width, height);
+		SET_TEXT_PROPORTIONAL(1);
+		
+		SET_TEXT_JUSTIFY(0);
+		SET_TEXT_CENTER(0);
+		SET_TEXT_RIGHT_JUSTIFY(0);
+	}
+	
+	function draw_text(short string gxtName, float x, float y)
+	{
+		DISPLAY_TEXT(x, y, gxtName);
+	}
+	
+	function draw_number(short string gxtName, float x, float y, int val)
+	{
+		DISPLAY_TEXT_WITH_NUMBER(x, y, gxtName, val);
+	}
+	
+	function draw_float(short string gxtName, float x, float y, float val)
+	{
+		DISPLAY_TEXT_WITH_FLOAT(x, y, gxtName, val, 2);
 	}
 }
