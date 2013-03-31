@@ -43,7 +43,7 @@ mission TRAINER3S {
 	int last_selected[6];
 	Model menu_item_model[12];
 	Car v_spawn;
-	bool disable_menu, menu_items_set, menu_action, menu_forward_pressed, menu_back_pressed;
+	bool disable_menu, menu_items_set, menu_action, menu_next, menu_next2, menu_forward_pressed, menu_back_pressed;
 	//short string menu_header;
 
 	//menu_header = "TS_MAIN";
@@ -91,19 +91,19 @@ mission TRAINER3S {
 				if (menu_level == 1)
 				{
 					//menu_header = "TS_MAIN";
-					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_PLAY", "TS_VEHI",  "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_VEHI",  "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 				}
 				// Player
-				else if (mainMenu == 1)
+				/*else if (mainMenu == 1)
 				{
 					if (menu_level == 2)
 					{
 						//menu_header = "TS_PLAY";
 						SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_MODL", "TS_APPR", "TS_ACCS", "TS_WEAP", "TS_HETH", "TS_WANT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 					}
-				}
+				}*/
 				// Vehicle
-				else if (mainMenu == 2)
+				else if (mainMenu == 1)
 				{
 					if (menu_level == 2)
 					{
@@ -120,84 +120,423 @@ mission TRAINER3S {
 					}
 					else if (menu_level == 4)
 					{
-						if (last_selected[3] == 1)
+						if (subMenu == 1)
 						{
-							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_AIRP", "TS_HELI", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							if (last_selected[3] == 1)
+							{
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_AIRP", "TS_HELI", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							}
+							else if (last_selected[3] == 2)
+							{
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_BIKE", "TS_COVT", "TS_IDST", "TS_LOWR", "TS_OROD", "TS_PUBS", "TS_SALO", "TS_SPOR", "TS_SWAG", "DUMMY", "DUMMY", "DUMMY");
+							}
+							else if (last_selected[3] == 3)
+							{
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_BOAT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							}
+							else if (last_selected[3] == 4)
+							{
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_TRIL", "TS_UVEH", "TS_RCVH", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							}
 						}
-						else if (last_selected[3] == 2)
+						// !! TEMP Menu back function for non-implemented menu items
+						else
 						{
-							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_BIKE", "TS_COVT", "TS_IDST", "TS_LOWR", "TS_OROD", "TS_PUBS", "TS_SALO", "TS_SPOR", "TS_SWAG", "DUMMY", "DUMMY", "DUMMY");
+							menu_back_pressed = true;
 						}
-
-						/*if (last_selected[3] == 1)
-						{
-							menu_action = true;
-							menu_item_model[0] = %ALPHA;
-							menu_item_model[1] = %BANSHEE;
-							menu_item_model[2] = %BLOODRA;
-							menu_item_model[3] = %BUFFALO;
-							menu_item_model[4] = %BULLET;
-							SET_MENU_COLUMN(menu, 0, "DUMMY", "ALPHA", "BANSHEE", "BLOODRA", "BUFFALO", "BULLET", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");	
-						}*/
 					}
 					else if (menu_level == 5)
 					{
-						/**********************************
-									Air Vehicles
-						**********************************/
-						if (last_selected[3] == 1)
+						if (subMenu == 1)
 						{
-							if (last_selected[4] == 1)
+							/**********************************
+										Air Vehicles
+							**********************************/
+							if (last_selected[3] == 1)
 							{
-								menu_action = true;
-								menu_item_model[0] = %SKIMMER;
-								menu_item_model[1] = %RUSTLER;
-								menu_item_model[2] = %BEAGLE;
-								menu_item_model[3] = %CROPDUST;
-								menu_item_model[4] = %STUNT;
-								menu_item_model[5] = %SHAMAL;
-								menu_item_model[6] = %HYDRA;
-								menu_item_model[7] = %NEVADA;
-								menu_item_model[8] = %AT400;
-								menu_item_model[9] = %ANDROM;
-								menu_item_model[10] = %DODO;
-								SET_MENU_COLUMN(menu, 0, "DUMMY", "SKIMMER", "RUSTLER", "BEAGLE", "CROPDST", "STUNT", "SHAMAL", "HYDRA", "NEVADA", "AT400", "ANDROM", "DODO", "DUMMY");
+								if (last_selected[4] == 1)
+								{
+									menu_action = true;
+									menu_item_model[0] = %SKIMMER;
+									menu_item_model[1] = %RUSTLER;
+									menu_item_model[2] = %BEAGLE;
+									menu_item_model[3] = %CROPDUST;
+									menu_item_model[4] = %STUNT;
+									menu_item_model[5] = %SHAMAL;
+									menu_item_model[6] = %HYDRA;
+									menu_item_model[7] = %NEVADA;
+									menu_item_model[8] = %AT400;
+									menu_item_model[9] = %ANDROM;
+									menu_item_model[10] = %DODO;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "SKIMMER", "RUSTLER", "BEAGLE", "CROPDST", "STUNT", "SHAMAL", "HYDRA", "NEVADA", "AT400", "ANDROM", "DODO", "DUMMY");
+								}
+								else if (last_selected[4] == 2)
+								{
+									menu_action = true;
+									menu_item_model[0] = %CARGOBOB;
+									menu_item_model[1] = %HUNTER;
+									menu_item_model[2] = %LEVIATHN;
+									menu_item_model[3] = %MAVERICK;
+									menu_item_model[4] = %VCNMAV;
+									menu_item_model[5] = %POLMAV;
+									menu_item_model[6] = %RAINDANC;
+									menu_item_model[7] = %SEASPAR;
+									menu_item_model[8] = %SPARROW;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "CARGOBB", "HUNTER", "LEVIATH", "MAVERIC", "SANMAV", "POLMAV", "RAINDNC", "SEASPAR", "SPARROW", "DUMMY", "DUMMY", "DUMMY");
+								}
 							}
-							else if (last_selected[4] == 2)
+							/**********************************
+										Land Vehicles
+							**********************************/
+							else if (last_selected[3] == 2)
 							{
-								menu_action = true;
-								menu_item_model[0] = %CARGOBOB;
-								menu_item_model[1] = %HUNTER;
-								menu_item_model[2] = %LEVIATHN;
-								menu_item_model[3] = %MAVERICK;
-								menu_item_model[4] = %VCNMAV;
-								menu_item_model[5] = %POLMAV;
-								menu_item_model[6] = %RAINDANC;
-								menu_item_model[7] = %SEASPAR;
-								menu_item_model[8] = %SPARROW;
-								SET_MENU_COLUMN(menu, 0, "DUMMY", "CARGOBB", "HUNTER", "LEVIATH", "MAVERIC", "SANMAV", "POLMAV", "RAINDNC", "SEASPAR", "SPARROW", "DUMMY", "DUMMY", "DUMMY");
+								if (last_selected[4] == 1)
+								{
+									if (!menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %BIKE;
+										menu_item_model[1] = %BMX;
+										menu_item_model[2] = %MTBIKE;
+										menu_item_model[3] = %FAGGIO;
+										menu_item_model[4] = %PIZZABOY;
+										menu_item_model[5] = %BF400;
+										menu_item_model[6] = %NRG500;
+										menu_item_model[7] = %PCJ600;
+										menu_item_model[8] = %FCR900;
+										menu_item_model[9] = %COPBIKE;
+										menu_item_model[10] = %FREEWAY;
+										// Next page
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "BIKE", "BMX", "MTBIKE", "FAGGIO", "PIZZABO", "BF400", "NRG500", "PCJ600", "FCR900", "HPV1000", "FREEWAY", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %WAYFARER;
+										menu_item_model[1] = %SANCHEZ;
+										menu_item_model[2] = %QUAD;
+										menu_item_model[3] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "WAYFARE", "SANCHEZ", "QUAD", "TS_BACK", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+									}
+								}
+								else if (last_selected[4] == 2)
+								{
+									menu_action = true;
+									menu_item_model[0] = %COMET;
+									menu_item_model[1] = %FELTZER;
+									menu_item_model[2] = %STALLION;
+									menu_item_model[3] = %WINDSOR;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "COMET", "FELTZER", "STALION", "WINDSOR", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+								}
+								else if (last_selected[4] == 3)
+								{
+									if (menu_next2)
+									{
+										menu_action = true;
+										menu_item_model[0] = %UTILITY;
+										menu_item_model[1] = %WALTON;
+										menu_item_model[2] = %YANKEE;
+										menu_item_model[3] = %YOSEMITE;
+										menu_item_model[4] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "UTILITY", "WALTON", "YANKEE", "YOSEMIT", "TS_BACK", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+									}
+									else if (menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %PACKER;
+										menu_item_model[1] = %PETRO;
+										menu_item_model[2] = %PICADOR;
+										menu_item_model[3] = %PONY;
+										menu_item_model[4] = %RDTRAIN;
+										menu_item_model[5] = %RUMPO;
+										menu_item_model[6] = %SADLER;
+										menu_item_model[7] = %SADLSHIT;
+										menu_item_model[8] = %TOPFUN;
+										menu_item_model[9] = %TRACTOR;
+										menu_item_model[10] = %TRASH;
+										menu_item_model[11] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "PACKER", "PETROL", "PICADOR", "PONY", "RDTRAIN", "RUMPO", "SADLER", "SADLSHI", "TOPFUN", "TRACTOR", "TRASHM", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %BENSON;
+										menu_item_model[1] = %BOBCAT;
+										menu_item_model[2] = %BURRITO;
+										menu_item_model[3] = %BOXVILLE;
+										menu_item_model[4] = %BOXBURG;
+										menu_item_model[5] = %CEMENT;
+										menu_item_model[6] = %DFT30;
+										menu_item_model[7] = %FLATBED;
+										menu_item_model[8] = %LINERUN;
+										menu_item_model[9] = %MULE;
+										menu_item_model[10] = %NEWSVAN;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "BENSON", "BOBCAT", "BURRITO", "BOXVILL", "BOXBURG", "CEMENT", "DFT30", "FLATBED", "LINERUN", "MULE", "NEWSVAN", "TS_NEXT");
+									}
+								}
+								else if (last_selected[4] == 4)
+								{
+									menu_action = true;
+									menu_item_model[0] = %BLADE;
+									menu_item_model[1] = %BROADWAY;
+									menu_item_model[2] = %REMINGTN;
+									menu_item_model[3] = %SAVANNA;
+									menu_item_model[4] = %SLAMVAN;
+									menu_item_model[5] = %TAHOMA;
+									menu_item_model[6] = %TORNADO;
+									menu_item_model[7] = %VOODOO;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "BLADE", "BROADWY", "REMING", "SAVANNA", "SLAMVAN", "TAHOMA", "TORNADO", "VOODOO", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+								}
+								else if (last_selected[4] == 5)
+								{
+									if (!menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %BANDITO;
+										menu_item_model[1] = %BFINJECT;
+										menu_item_model[2] = %DUNERIDE;
+										menu_item_model[3] = %HUNTLEY;
+										menu_item_model[4] = %LANDSTAL;
+										menu_item_model[5] = %MESA;
+										menu_item_model[6] = %MONSTER;
+										menu_item_model[7] = %MONSTERA;
+										menu_item_model[8] = %MONSTERB;
+										menu_item_model[9] = %PATRIOT;
+										menu_item_model[10] = %RANCHER;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "BANDITO", "BFINJC", "DUNE", "HUNTLEY", "LANDSTK", "MESAA", "MONSTER", "MONSTA", "MONSTB", "PATRIOT", "RANCHER", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %RNCHLURE;
+										menu_item_model[1] = %SANDKING;
+										menu_item_model[2] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "RANCHER", "SANDKIN", "TS_BACK", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+									}
+								}
+								else if (last_selected[4] == 6)
+								{
+									if (!menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %AMBULAN;
+										menu_item_model[1] = %BARRACKS;
+										menu_item_model[2] = %BUS;
+										menu_item_model[3] = %CABBIE;
+										menu_item_model[4] = %COACH;
+										menu_item_model[5] = %ENFORCER;
+										menu_item_model[6] = %FBIRANCH;
+										menu_item_model[7] = %FBITRUCK;
+										menu_item_model[8] = %FIRETRUK;
+										menu_item_model[9] = %FIRELA;
+										menu_item_model[10] = %COPCARLA;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "AMBULAN", "BARRCKS", "BUS", "CABBIE", "COACH", "ENFORCR", "FBIRANC", "FBITRUK", "FIRETRK", "FIRELA", "POLICAR", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %COPCARVG;
+										menu_item_model[1] = %COPCARSF;
+										menu_item_model[2] = %COPCARRU;
+										menu_item_model[3] = %RHINO;
+										menu_item_model[4] = %SWATVAN;
+										menu_item_model[5] = %TAXI;
+										menu_item_model[6] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "POLICAR", "POLICAR", "RANGER", "RHINO", "SWATVAN", "TAXI", "TS_BACK", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+									}
+								}
+								else if (last_selected[4] == 7)
+								{
+									if (menu_next2)
+									{
+										menu_action = true;
+										menu_item_model[0] = %PREVION;
+										menu_item_model[1] = %PRIMO;
+										menu_item_model[2] = %SENTINEL;
+										menu_item_model[3] = %STAFFORD;
+										menu_item_model[4] = %SULTAN;
+										menu_item_model[5] = %SUNRISE;
+										menu_item_model[6] = %TAMPA;
+										menu_item_model[7] = %VINCENT;
+										menu_item_model[8] = %VIRGO;
+										menu_item_model[9] = %WILLARD;
+										menu_item_model[10] = %WASHING;
+										menu_item_model[11] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "PREVION", "PRIMO", "SENTINL", "STAFFRD", "SULTAN", "SUNRISE", "TAMPA", "VINCENT", "VIRGO", "WILLARD", "WASHING", "TS_BACK");
+									}
+									else if (menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %GLENSHIT;
+										menu_item_model[1] = %GLENDALE;
+										menu_item_model[2] = %GREENWOO;
+										menu_item_model[3] = %HERMES;
+										menu_item_model[4] = %INTRUDER;
+										menu_item_model[5] = %MAJESTIC;
+										menu_item_model[6] = %MANANA;
+										menu_item_model[7] = %MERIT;
+										menu_item_model[8] = %NEBULA;
+										menu_item_model[9] = %OCEANIC;
+										menu_item_model[10] = %PREMIER;
+										menu_item_model[11] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "GLENSHI", "GLENDAL", "GREENWO", "HERMES", "INTRUDR", "MAJESTC", "MANANA", "MERIT", "NEBULA", "OCEANIC", "PREMIER", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %ADMIRAL;
+										menu_item_model[1] = %BLOODRA;
+										menu_item_model[2] = %BRAVURA;
+										menu_item_model[3] = %BUCCANEE;
+										menu_item_model[4] = %CADRONA;
+										menu_item_model[5] = %CLOVER;
+										menu_item_model[6] = %ELEGANT;
+										menu_item_model[7] = %ELEGY;
+										menu_item_model[8] = %EMPEROR;
+										menu_item_model[9] = %ESPERANT;
+										menu_item_model[10] = %FORTUNE;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "ADMIRAL", "BLOODRA", "BRAVURA", "BUCCANE", "CADRONA", "CLOVER", "ELEGANT", "ELEGY", "EMPEROR", "ESPERAN", "FORTUNE", "TS_NEXT");
+									}
+								}
+								else if (last_selected[4] == 8)
+								{
+									if (!menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %ALPHA;
+										menu_item_model[1] = %BANSHEE;
+										menu_item_model[2] = %BLISTAC;
+										menu_item_model[3] = %BUFFALO;
+										menu_item_model[4] = %BULLET;
+										menu_item_model[5] = %CHEETAH;
+										menu_item_model[6] = %CLUB;
+										menu_item_model[7] = %EUROS;
+										menu_item_model[8] = %FLASH;
+										menu_item_model[9] = %HOTRING;
+										menu_item_model[10] = %HOTRINA;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "ALPHA", "BANSHEE", "BLISTAC", "BUFFALO", "BULLET", "CHEETAH", "CLUB", "EUROS", "FLASH", "HOTRING", "HOTRINA", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %HOTRINB;
+										menu_item_model[1] = %INFERNUS;
+										menu_item_model[2] = %JESTER;
+										menu_item_model[3] = %PHOENIX;
+										menu_item_model[4] = %SABRE;
+										menu_item_model[5] = %SUPERGT;
+										menu_item_model[6] = %TURISMO;
+										menu_item_model[7] = %URANUS;
+										menu_item_model[8] = %ZR350;
+										menu_item_model[9] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "HOTRINB", "INFERNU", "JESTER", "PHOENIX", "SABRE", "SUPERGT", "TURISMO", "URANUS", "ZR350", "TS_BACK", "DUMMY", "DUMMY");
+									}
+								}
+								else if (last_selected[4] == 9)
+								{
+									menu_action = true;
+									menu_item_model[0] = %MOONBEAM;
+									menu_item_model[1] = %PEREN;
+									menu_item_model[2] = %REGINA;
+									menu_item_model[3] = %SOLAIR;
+									menu_item_model[4] = %STRATUM;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "MOONBM", "PEREN", "REGINA", "SOLAIR", "STRATUM", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+								}
 							}
-						}
-						/**********************************
-									Land Vehicles
-						**********************************/
-						else if (last_selected[3] == 2)
-						{
-							if (last_selected[4] == 1)
+							/**********************************
+										Sea Vehicles
+							**********************************/
+							else if (last_selected[3] == 3)
 							{
-								menu_action = true;
-								menu_item_model[0] = %BIKE;
-								menu_item_model[1] = %BMX;
-								menu_item_model[2] = %MTBIKE;
-								menu_item_model[3] = %FAGGIO;
-								menu_item_model[4] = %PIZZABOY;
-								menu_item_model[5] = %BF400;
-								menu_item_model[6] = %NRG500;
-								menu_item_model[7] = %PCJ600;
-								menu_item_model[8] = %FCR900;
-								menu_item_model[9] = %COPBIKE;
-								menu_item_model[10] = %FREEWAY;
-								SET_MENU_COLUMN(menu, 0, "DUMMY", "BIKE", "BMX", "MTBIKE", "FAGGIO", "PIZZABO", "BF400", "NRG500", "PCJ600", "FCR900", "HPV1000", "FREEWAY", "TS_NEXT");
+								if (last_selected[4] == 1)
+								{
+									menu_action = true;
+									menu_item_model[0] = %COASTG;
+									menu_item_model[1] = %DINGHY;
+									menu_item_model[2] = %JETMAX;
+									menu_item_model[3] = %LAUNCH;
+									menu_item_model[4] = %MARQUIS;
+									menu_item_model[5] = %PREDATOR;
+									menu_item_model[6] = %REEFER;
+									menu_item_model[7] = %SPEEDER;
+									menu_item_model[8] = %SQUALO;
+									menu_item_model[9] = %TROPIC;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "COASTG", "DINGHY", "JETMAX", "LAUNCH", "MARQUIS", "PREDATR", "REEFER", "SPEEDER", "SQUALO", "TROPIC", "DUMMY", "DUMMY");
+								}
+							}
+							/**********************************
+									Miscellaneous Vehicles
+							**********************************/
+							else if (last_selected[3] == 4)
+							{
+								if (last_selected[4] == 1)
+								{
+									menu_action = true;
+									menu_item_model[0] = %ARTICT1;
+									menu_item_model[1] = %ARTICT2;
+									menu_item_model[2] = %FREIFLAT;
+									menu_item_model[3] = %STREAKC;
+									menu_item_model[4] = %PETROTR;
+									menu_item_model[5] = %FREIBOX;
+									menu_item_model[6] = %ARTICT3;
+									menu_item_model[7] = %BAGBOXA;
+									menu_item_model[8] = %BAGBOXB;
+									menu_item_model[9] = %TUGSTAIR;
+									menu_item_model[10] = %FARMTR1;
+									menu_item_model[11] = %UTILTR1;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "ARTICT1", "ARTICT2", "FRFLAT", "STREAKC", "PETROTR", "FRBOX", "ARTICT3", "BAGBOXA", "BAGBOXB", "TUGSTAI", "FARMTR1", "UTILTR1");
+								}
+								else if (last_selected[4] == 2)
+								{
+									if (menu_next2)
+									{
+										menu_action = true;
+										menu_item_model[0] = %TUG;
+										menu_item_model[1] = %HOTDOG;
+										menu_item_model[2] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "TUG", "HOTDOG", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+									}
+									else if (menu_next)
+									{
+										menu_action = true;
+										menu_item_model[0] = %JOURNEY;
+										menu_item_model[1] = %TOWTRUCK;
+										menu_item_model[2] = %FORKLIFT;
+										menu_item_model[3] = %COMBINE;
+										menu_item_model[4] = %FREIGHT;
+										menu_item_model[5] = %STREAK;
+										menu_item_model[6] = %VORTEX;
+										menu_item_model[7] = %HUSTLER;
+										menu_item_model[8] = %KART;
+										menu_item_model[9] = %MOWER;
+										menu_item_model[10] = %SWEEPER;
+										menu_item_model[11] = %9998;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "JOURNEY", "TOWTRUK", "FORKLFT", "COMBINE", "FREIGHT", "STREAK", "VORTEX", "HUSTLER", "KART", "MOWER", "SWEEPER", "TS_NEXT");
+									}
+									else
+									{
+										menu_action = true;
+										menu_item_model[0] = %DUMPER;
+										menu_item_model[1] = %STRETCH;
+										menu_item_model[2] = %MRWHOOP;
+										menu_item_model[3] = %SECURICA;
+										menu_item_model[4] = %HOTKNIFE;
+										menu_item_model[5] = %ROMERO;
+										menu_item_model[6] = %TRAM;
+										menu_item_model[7] = %CADDY;
+										menu_item_model[8] = %CAMPER;
+										menu_item_model[9] = %BAGGAGE;
+										menu_item_model[10] = %DOZER;
+										menu_item_model[11] = %9999;
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "DUMPER", "STRETCH", "WHOOPEE", "SECURI", "HOTKNIF", "ROMERO", "TRAM", "CADDY", "CAMPER", "BAGGAGE", "DOZER", "TS_NEXT");
+									}
+								}
 							}
 						}
 					}
@@ -232,62 +571,75 @@ mission TRAINER3S {
 					{
 						if (menu_level == 5)
 						{
-							if (IS_MODEL_IN_CDIMAGE(menu_item_model[action_item_selected]))
+							if (menu_item_model[action_item_selected] == 9999)
 							{
-								if (IS_CHAR_IN_ANY_CAR(playerActor))
-									GET_CAR_CHAR_IS_USING(playerActor, v_spawn);
-		
-								float curHeading, curX, curY, curZ;
-		
-								if (DOES_VEHICLE_EXIST(v_spawn))
+								menu_next = !menu_next;
+								SET_SELECTED_MENU_ITEM(menu, 0);
+							}
+							else if (menu_item_model[action_item_selected] == 9998)
+							{
+								menu_next2 = !menu_next2;
+								SET_SELECTED_MENU_ITEM(menu, 0);
+							}
+							else
+							{
+								if (IS_MODEL_IN_CDIMAGE(menu_item_model[action_item_selected]))
 								{
-									//curSpeed = GET_CAR_SPEED(v_spawn);
-									GET_CAR_HEADING(v_spawn, curHeading);
-									GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-									WARP_CHAR_FROM_CAR_TO_COORD(playerActor, curX, curY, curZ);
-									DELETE_CAR(v_spawn);
-								}
-								else
-								{
-									GET_CHAR_HEADING(playerActor, curHeading);
-									GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
-								}
-		
-								REQUEST_MODEL(menu_item_model[action_item_selected]);
-								while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
-									WAIT(0);
-								v_spawn = CREATE_CAR(menu_item_model[action_item_selected], curX, curY, curZ);
-								WARP_CHAR_INTO_CAR(playerActor, v_spawn);
-								SET_CAR_HEADING(v_spawn, curHeading);
-								SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-							
-								SET_CAR_ENGINE_ON(v_spawn, true);
-							
-								if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
-									SET_HELI_BLADES_FULL_SPEED(v_spawn);
-							
-								MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
-
-								//float curX, curY, curZ;
-								//GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
-				
-								SET_FIXED_CAMERA_POSITION(curX - 4.8634, curY - 2.832, curZ + 1.9727, 0.0, 0.0, 0.0);
-								POINT_CAMERA_AT_POINT(curX - 3.9654, curY - 2.4352, curZ + 1.7829, 2);
-
-								/*eLocation wLocation;
-								GET_INTERIOR_FROM_CHAR(playerActor, wLocation);
-		
-								if (wLocation != 0)
-								{
-									float cGroundZ;
-									cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
-									SET_CHAR_COORDINATES_NO_OFFSET(playerActor, curX, curY, cGroundZ);
-									LOAD_SCENE(curX, curY, curZ);
-									SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
-								}*/
+									if (IS_CHAR_IN_ANY_CAR(playerActor))
+										GET_CAR_CHAR_IS_USING(playerActor, v_spawn);
+			
+									float curHeading, curX, curY, curZ;
+			
+									if (DOES_VEHICLE_EXIST(v_spawn))
+									{
+										//curSpeed = GET_CAR_SPEED(v_spawn);
+										GET_CAR_HEADING(v_spawn, curHeading);
+										GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
+										WARP_CHAR_FROM_CAR_TO_COORD(playerActor, curX, curY, curZ);
+										DELETE_CAR(v_spawn);
+									}
+									else
+									{
+										GET_CHAR_HEADING(playerActor, curHeading);
+										GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+									}
+			
+									REQUEST_MODEL(menu_item_model[action_item_selected]);
+									while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
+										WAIT(0);
+									v_spawn = CREATE_CAR(menu_item_model[action_item_selected], curX, curY, curZ);
+									WARP_CHAR_INTO_CAR(playerActor, v_spawn);
+									SET_CAR_HEADING(v_spawn, curHeading);
+									SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
 								
-								//if (curSpeed != 0)
-									//SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+									SET_CAR_ENGINE_ON(v_spawn, true);
+								
+									if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
+										SET_HELI_BLADES_FULL_SPEED(v_spawn);
+								
+									MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
+	
+									//float curX, curY, curZ;
+									//GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+					
+									SET_FIXED_CAMERA_POSITION(curX - 4.8634, curY - 2.832, curZ + 1.9727, 0.0, 0.0, 0.0);
+									POINT_CAMERA_AT_POINT(curX - 3.9654, curY - 2.4352, curZ + 1.7829, 2);
+	
+									/*eLocation wLocation;
+									GET_INTERIOR_FROM_CHAR(playerActor, wLocation);
+			
+									if (wLocation != 0)
+									{
+										float cGroundZ;
+										cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
+										SET_CHAR_COORDINATES_NO_OFFSET(playerActor, curX, curY, cGroundZ);
+										LOAD_SCENE(curX, curY, curZ);
+										SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
+									}*/
+									
+									//if (curSpeed != 0)
+										//SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+								}
 							}
 						}
 					}
@@ -306,6 +658,8 @@ mission TRAINER3S {
 			{
 				menu_back_pressed = false;
 				menu_action = false;
+				menu_next = false;
+				menu_next2 = false;
 				if (menu_level != 1)
 				{
 					menu_items_set = false;
@@ -350,7 +704,7 @@ mission TRAINER3S {
 				BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
 				DISPLAY_RADAR(false);
 				SHOW_UPDATE_STATS(false);
-				CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
+				CREATE_MENU("TS_TRNR", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
 				SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
 
 				float curX, curY, curZ;
