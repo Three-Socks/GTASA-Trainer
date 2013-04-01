@@ -11,10 +11,19 @@ start thread main {
 	REQUEST_COLLISION(1952.0, -2472.0);
 	LOAD_SCENE(1952.0, -2472.0, 13.0);
 
-	//SET_FLOAT_STAT(165, 800.0);
-	//SET_FLOAT_STAT(23, 800.0);
-	//SET_FLOAT_STAT(21, 200.0);
-	//SET_FLOAT_STAT(160, 200.0);
+	SET_FLOAT_STAT(165, 800.0);
+	SET_FLOAT_STAT(23, 800.0);
+	SET_FLOAT_STAT(21, 200.0);
+
+	// Driving skill
+	SET_FLOAT_STAT(160, 200.0);
+	// Flying skill
+	SET_FLOAT_STAT(223, 200.0);
+	// Bike skill
+	SET_FLOAT_STAT(229, 200.0);
+	// Cycling skill
+	SET_FLOAT_STAT(230, 200.0);
+
 	player = CREATE_PLAYER(PedPlayer2, 1952.0, -2472.0, 13.0);
 	//playerGroup = player.Group;
 	playerActor = GET_PLAYER_CHAR(player);
@@ -23,6 +32,35 @@ start thread main {
 	SET_PLAYER_SKIN_BY_NAME(player, "SNEAKERBINCBLK", "SNEAKER", 3);
 	SET_PLAYER_SKIN_BY_NAME(player, "PLAYER_FACE", "HEAD", 1);
 	REBUILD_PLAYER(player);
+
+	ADD_HOSPITAL_RESTART(2027.77, -1420.52, 15.99, 137.0, 0);
+	ADD_HOSPITAL_RESTART(1180.85, -1325.57, 12.58, 271.4, 0);
+	ADD_POLICE_RESTART(1550.68, -1675.49, 14.51, 90.0, 0);
+	ADD_HOSPITAL_RESTART(1244.437, 331.2261, 18.5547, 7.5465, 1);
+	ADD_POLICE_RESTART(632.2344, -571.7104, 15.3515, 267.2, 1);
+	ADD_HOSPITAL_RESTART(-2199.719, -2308.075, 29.6181, 322.8928, 1);
+	ADD_POLICE_RESTART(-2163.829, -2387.817, 29.625, 134.2066, 1);
+	ADD_HOSPITAL_RESTART(-2670.285, 616.4364, 13.4531, 183.1042, 1);
+	ADD_POLICE_RESTART(-1605.792, 716.8598, 11.0241, 355.2978, 1);
+	ADD_HOSPITAL_RESTART(-316.3832, 1056.045, 18.7344, 1.6017, 2);
+	ADD_POLICE_RESTART(-212.1889, 979.4168, 18.3219, 278.0478, 2);
+	ADD_HOSPITAL_RESTART(-1514.823, 2527.119, 54.7443, 2.3546, 2);
+	ADD_POLICE_RESTART(-1393.072, 2633.116, 54.9491, 86.0424, 2);
+	ADD_HOSPITAL_RESTART(1578.446, 1770.682, 9.8358, 99.7567, 2);
+	ADD_POLICE_RESTART(2337.083, 2453.802, 13.9765, 90.7643, 2);
+
+	/*CHANGE_GARAGE_TYPE("BODLAWN", 38);
+	CHANGE_GARAGE_TYPE("MODLAST", 36);
+	CHANGE_GARAGE_TYPE("MDSSFSE", 38);
+	CHANGE_GARAGE_TYPE("MDS1SFS", 37);
+	CHANGE_GARAGE_TYPE("VECMOD", 38);
+
+	ACTIVATE_GARAGE("BODLAWN");
+	ACTIVATE_GARAGE("MODLAST");
+	ACTIVATE_GARAGE("MDSSFSE");
+	ACTIVATE_GARAGE("MDS1SFS");
+	ACTIVATE_GARAGE("VECMOD");
+	ACTIVATE_GARAGE("DHANGAR");*/
 
 	FORCE_WEATHER_NOW(1);
 	SET_CAMERA_BEHIND_PLAYER();
@@ -38,32 +76,32 @@ start thread main {
 }
 
 mission TRAINER3S {
-	int menu, menu_level, item_selected;
+	int menu, menu_carcol, menu_level, item_selected, button_forward, button_back;
 
 	int last_selected[6];
 	Model menu_item_model[12];
-	Car v_spawn;
-	bool disable_menu, menu_items_set, menu_action, menu_next, menu_next2, menu_forward_pressed, menu_back_pressed;
+	Car v_modding;
+	bool disable_menu, menu_items_set, menu_action, menu_incarcol, menu_next, menu_next2, menu_forward_pressed, menu_back_pressed;
 	//short string menu_header;
 
 	//menu_header = "TS_MAIN";
 	menu_level = 1;
 	disable_menu = true;
 
-	/*LOAD_MISSION_TEXT("T3S");
-	SET_DEATHARREST_STATE(false);
-	SET_PLAYER_CONTROL(player, false);
-	BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
-	DISPLAY_RADAR(false);
-	SHOW_UPDATE_STATS(false);
-	CREATE_MENU("TS_MAIN", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
-	SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);*/
+	button_forward = 15;
+	button_back = 16;
+
+	if (IS_PS2_VERSION())
+	{
+		button_forward = 16;
+		button_back = 17;
+	}
 
 	while (true)
 	{
 		wait(0);
 
-		float x, y, z, h, pos_x = 5.0, width = 0.5, height = 1.0;
+		/*float x, y, z, h, pos_x = 5.0, width = 0.5, height = 1.0;
 		int r = 255, g = 255, b = 255, a = 110;
 		GET_CHAR_COORDINATES(playerActor, x, y, z);
 		GET_CHAR_HEADING(playerActor, h);
@@ -75,7 +113,7 @@ mission TRAINER3S {
 		set_up_draw(2, width, height, r, g, b, a);
 		draw_float("BJ_0", pos_x, 35.0, z);
 		set_up_draw(2, width, height, r, g, b, a);
-		draw_float("BJ_0", pos_x, 45.0, h);
+		draw_float("BJ_0", pos_x, 45.0, h);*/
 
 		if (!disable_menu)
 		{
@@ -91,7 +129,7 @@ mission TRAINER3S {
 				if (menu_level == 1)
 				{
 					//menu_header = "TS_MAIN";
-					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_VEHI",  "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+					SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_VEHI",  "TS_EXIT", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 				}
 				// Player
 				/*else if (mainMenu == 1)
@@ -117,6 +155,25 @@ mission TRAINER3S {
 							//menu_header = "TS_SPWN";
 							SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_AIRV", "TS_LVEH", "TS_SVEH", "TS_MVEH", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 						}
+						else if (IS_CHAR_IN_ANY_CAR(playerActor))
+						{
+							if (subMenu == 3)
+							{
+								SET_MENU_COLUMN(menu, 0, "DUMMY", "CARCOL1", "CARCOL2", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							}
+							else if (subMenu == 5)
+							{
+								GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+								SET_CAR_DIRT_LEVEL(v_modding, 0.0); 
+								FIX_CAR(v_modding);
+								menu_back_pressed = true;
+							}
+						}
+						// If char is not in vehicle back dont go any further (TODO: error msg?)
+						else
+						{
+							menu_back_pressed = true;
+						}
 					}
 					else if (menu_level == 4)
 					{
@@ -139,10 +196,15 @@ mission TRAINER3S {
 								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_TRIL", "TS_UVEH", "TS_RCVH", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 							}
 						}
-						// !! TEMP Menu back function for non-implemented menu items
-						else
+						else if (subMenu == 3)
 						{
-							menu_back_pressed = true;
+							menu_action = true;
+							if (!menu_incarcol)
+							{
+								menu_incarcol = true;
+								DELETE_MENU(menu);
+								CREATE_CARCOL_MENU("CARM1", 29.0, 145.0, 25.7, 8, 1, 1, 1, menu_carcol);
+							}
 						}
 					}
 					else if (menu_level == 5)
@@ -500,7 +562,7 @@ mission TRAINER3S {
 										menu_item_model[0] = %TUG;
 										menu_item_model[1] = %HOTDOG;
 										menu_item_model[2] = %9998;
-										SET_MENU_COLUMN(menu, 0, "DUMMY", "TUG", "HOTDOG", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+										SET_MENU_COLUMN(menu, 0, "DUMMY", "TUG", "HOTDOG", "TS_BACK", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
 									}
 									else if (menu_next)
 									{
@@ -537,12 +599,23 @@ mission TRAINER3S {
 										SET_MENU_COLUMN(menu, 0, "DUMMY", "DUMPER", "STRETCH", "WHOOPEE", "SECURI", "HOTKNIF", "ROMERO", "TRAM", "CADDY", "CAMPER", "BAGGAGE", "DOZER", "TS_NEXT");
 									}
 								}
+								else if (last_selected[4] == 3)
+								{
+									menu_action = true;
+									menu_item_model[0] = %RCBANDIT;
+									menu_item_model[1] = %RCBARON;
+									menu_item_model[2] = %RCRAIDER;
+									menu_item_model[3] = %RCGOBLIN;
+									menu_item_model[4] = %RCTIGER;
+									menu_item_model[5] = %RCCAM;
+									SET_MENU_COLUMN(menu, 0, "DUMMY", "RCBANDIT", "RCBARON", "RCRAIDE", "RCGOBLI", "RCTIGER", "RCCAM", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+								}
 							}
 						}
 					}
 				}			
 				// Exit
-				else if (mainMenu == 3)
+				else if (mainMenu == 2)
 				{
 					SET_PLAYER_CONTROL(player, true);
 					RESTORE_CAMERA_JUMPCUT();
@@ -554,11 +627,11 @@ mission TRAINER3S {
 					//TERMINATE_SCRIPT(trainer3s1);
 				}
 			}
-	
-			if (menu_forward_pressed && !IS_BUTTON_PRESSED(0, 16))
+
+			if (menu_forward_pressed && !IS_BUTTON_PRESSED(0, button_forward))
 			{
 				int mainMenu = last_selected[1];
-				//int subMenu = last_selected[2]; 
+				int subMenu = last_selected[2]; 
 				menu_forward_pressed = false;
 				if (menu_action)
 				{
@@ -567,79 +640,131 @@ mission TRAINER3S {
 					int action_item_selected = GET_MENU_ITEM_SELECTED(menu);
 	
 					// Vehicle
-					if (mainMenu == 2)
+					if (mainMenu == 1)
 					{
-						if (menu_level == 5)
+						// Spawn
+						if (subMenu == 1)
 						{
-							if (menu_item_model[action_item_selected] == 9999)
+							if (menu_level == 5)
 							{
-								menu_next = !menu_next;
-								SET_SELECTED_MENU_ITEM(menu, 0);
-							}
-							else if (menu_item_model[action_item_selected] == 9998)
-							{
-								menu_next2 = !menu_next2;
-								SET_SELECTED_MENU_ITEM(menu, 0);
-							}
-							else
-							{
-								if (IS_MODEL_IN_CDIMAGE(menu_item_model[action_item_selected]))
+								if (menu_item_model[action_item_selected] == 9999)
 								{
-									if (IS_CHAR_IN_ANY_CAR(playerActor))
-										GET_CAR_CHAR_IS_USING(playerActor, v_spawn);
-			
-									float curHeading, curX, curY, curZ;
-			
-									if (DOES_VEHICLE_EXIST(v_spawn))
-									{
-										//curSpeed = GET_CAR_SPEED(v_spawn);
-										GET_CAR_HEADING(v_spawn, curHeading);
-										GET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-										WARP_CHAR_FROM_CAR_TO_COORD(playerActor, curX, curY, curZ);
-										DELETE_CAR(v_spawn);
-									}
-									else
-									{
-										GET_CHAR_HEADING(playerActor, curHeading);
-										GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
-									}
-			
-									REQUEST_MODEL(menu_item_model[action_item_selected]);
-									while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
-										WAIT(0);
-									v_spawn = CREATE_CAR(menu_item_model[action_item_selected], curX, curY, curZ);
-									WARP_CHAR_INTO_CAR(playerActor, v_spawn);
-									SET_CAR_HEADING(v_spawn, curHeading);
-									SET_CAR_COORDINATES(v_spawn, curX, curY, curZ);
-								
-									SET_CAR_ENGINE_ON(v_spawn, true);
-								
-									if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
-										SET_HELI_BLADES_FULL_SPEED(v_spawn);
-								
-									MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
-	
-									//float curX, curY, curZ;
-									//GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
-					
-									SET_FIXED_CAMERA_POSITION(curX - 4.8634, curY - 2.832, curZ + 1.9727, 0.0, 0.0, 0.0);
-									POINT_CAMERA_AT_POINT(curX - 3.9654, curY - 2.4352, curZ + 1.7829, 2);
-	
-									/*eLocation wLocation;
-									GET_INTERIOR_FROM_CHAR(playerActor, wLocation);
-			
-									if (wLocation != 0)
-									{
-										float cGroundZ;
-										cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
-										SET_CHAR_COORDINATES_NO_OFFSET(playerActor, curX, curY, cGroundZ);
-										LOAD_SCENE(curX, curY, curZ);
-										SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
-									}*/
-									
-									//if (curSpeed != 0)
-										//SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+									menu_next = !menu_next;
+									SET_SELECTED_MENU_ITEM(menu, 0);
 								}
+								else if (menu_item_model[action_item_selected] == 9998)
+								{
+									menu_next2 = !menu_next2;
+									SET_SELECTED_MENU_ITEM(menu, 0);
+								}
+								else
+								{
+									if (IS_MODEL_IN_CDIMAGE(menu_item_model[action_item_selected]))
+									{
+										if (IS_CHAR_IN_ANY_CAR(playerActor))
+											GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+				
+										float cGroundZ, curHeading, curX, curY, curZ;
+				
+										if (DOES_VEHICLE_EXIST(v_modding))
+										{
+											//curSpeed = GET_CAR_SPEED(v_spawn);
+											GET_CAR_HEADING(v_modding, curHeading);
+											GET_CAR_COORDINATES(v_modding, curX, curY, curZ);
+											cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
+											WARP_CHAR_FROM_CAR_TO_COORD(playerActor, curX, curY, cGroundZ);
+											DELETE_CAR(v_modding);
+										}
+										else
+										{
+											GET_CHAR_HEADING(playerActor, curHeading);
+											GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+										}
+				
+										REQUEST_MODEL(menu_item_model[action_item_selected]);
+										while (!HAS_MODEL_LOADED(menu_item_model[action_item_selected]))
+											WAIT(0);
+										v_modding = CREATE_CAR(menu_item_model[action_item_selected], curX, curY, curZ);
+										WARP_CHAR_INTO_CAR(playerActor, v_modding);
+										SET_CAR_HEADING(v_modding, curHeading);
+										SET_CAR_COORDINATES(v_modding, curX, curY, curZ);
+									
+										//SET_CAR_ENGINE_ON(v_modding, true);
+									
+										//if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
+											//SET_HELI_BLADES_FULL_SPEED(v_modding);
+	
+										float camX, camY, camZ, camPX, camPY, camPZ;
+						
+										if (IS_THIS_MODEL_A_PLANE(menu_item_model[action_item_selected]))
+										{
+											camX = 4.8634 * 8;
+											camY = 2.832 * 8;
+											camZ = 1.9727 * 8;
+											camPX = 3.9654 * 8;
+											camPY = 2.4352 * 8;
+											camPZ = 1.7829 * 8;
+										}
+										else if (IS_THIS_MODEL_A_HELI(menu_item_model[action_item_selected]))
+										{
+											camX = 4.8634 * 4;
+											camY = 2.832 * 4;
+											camZ = 1.9727 * 4;
+											camPX = 3.9654 * 4;
+											camPY = 2.4352 * 4;
+											camPZ = 1.7829 * 4;
+										}
+										else if (IS_BIG_VEHICLE(v_modding))
+										{
+											camX = 4.8634 * 2;
+											camY = 2.832 * 2;
+											camZ = 1.9727 * 2;
+											camPX = 3.9654 * 2;
+											camPY = 2.4352 * 2;
+											camPZ = 1.7829 * 2;
+										}
+										else
+										{
+											camX = 4.8634;
+											camY = 2.832;
+											camZ = 1.9727;
+											camPX = 3.9654;
+											camPY = 2.4352;
+											camPZ = 1.7829;
+										}
+	
+										//float curX, curY, curZ;
+										GET_CHAR_COORDINATES(playerActor, curX, curY, curZ);
+	
+										SET_FIXED_CAMERA_POSITION(curX - camX, curY - camY, curZ + camZ, 0.0, 0.0, 0.0);
+										POINT_CAMERA_AT_POINT(curX - camPX, curY - camPY, curZ + camPZ, 2);
+		
+										MARK_MODEL_AS_NO_LONGER_NEEDED(menu_item_model[action_item_selected]);
+		
+										/*eLocation wLocation;
+										GET_INTERIOR_FROM_CHAR(playerActor, wLocation);
+				
+										if (wLocation != 0)
+										{
+											float cGroundZ;
+											cGroundZ = GET_GROUND_Z_FOR_3D_COORD(curX, curY, curZ);
+											SET_CHAR_COORDINATES_NO_OFFSET(playerActor, curX, curY, cGroundZ);
+											LOAD_SCENE(curX, curY, curZ);
+											SET_CAR_HAS_BEEN_CREATED_IN_INTERIOR(v_spawn, 1);
+										}*/
+
+										//if (curSpeed != 0)
+											//SET_CAR_FORWARD_SPEED(v_spawn, curSpeed);
+									}
+								}
+							}
+						}
+						// Colour
+						else if (subMenu == 3)
+						{
+							if (menu_level == 4)
+							{
+								CHANGE_CAR_COLOUR_TO_CARCOL_MENU_ITEM(menu_carcol, v_modding, last_selected[3], GET_MENU_ITEM_SELECTED(menu_carcol));
 							}
 						}
 					}
@@ -654,12 +779,22 @@ mission TRAINER3S {
 				}
 			}
 	
-			if (menu_back_pressed && !IS_BUTTON_PRESSED(0, 15))
+			if (menu_back_pressed && !IS_BUTTON_PRESSED(0, button_back))
 			{
 				menu_back_pressed = false;
 				menu_action = false;
 				menu_next = false;
 				menu_next2 = false;
+
+				// re-create menu when in carcol
+				if (menu_incarcol)
+				{
+					menu_incarcol = false;
+					DELETE_MENU(menu_carcol);
+					CREATE_MENU("TS_TRNR", 29.0, 145.0, 186.0, 1, 1, 1, 1, menu);
+					SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
+				}
+
 				if (menu_level != 1)
 				{
 					menu_items_set = false;
@@ -672,7 +807,7 @@ mission TRAINER3S {
 				//{
 					//menu_core_shutdown();
 					//menu_level = 0;
-				//}
+				//}				
 			}
 		
 			//SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 3, "PLA_10", GET_MENU_ITEM_SELECTED(menu), GET_MENU_ITEM_ACCEPTED(menu));
@@ -685,14 +820,14 @@ mission TRAINER3S {
 			SET_MENU_ITEM_WITH_NUMBER(menu_debug, 0, 5, "DOLLAR", menu_level);*/
 			//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "DOLLAR", menu_level);
 		
-			if (IS_BUTTON_PRESSED(0, 16))
+			if (IS_BUTTON_PRESSED(0, button_forward))
 				menu_forward_pressed = true;
-			else if (IS_BUTTON_PRESSED(0, 15))
+			else if (IS_BUTTON_PRESSED(0, button_back))
 				menu_back_pressed = true;
 		}
 		else
 		{
-			if (IS_BUTTON_PRESSED(0, 8))
+			if (IS_BUTTON_PRESSED(0, 4) && IS_BUTTON_PRESSED(0, 8))
 			{
 				disable_menu = false;
 				menu_items_set = false;
@@ -704,7 +839,7 @@ mission TRAINER3S {
 				BLOCK_HELP_MESSAGES_IN_OTHER_SCRIPTS(true);
 				DISPLAY_RADAR(false);
 				SHOW_UPDATE_STATS(false);
-				CREATE_MENU("TS_TRNR", 29.0, 145.0, 186.0, 1, 1, 1, 1, ref menu);
+				CREATE_MENU("TS_TRNR", 29.0, 145.0, 186.0, 1, 1, 1, 1, menu);
 				SET_MENU_COLUMN_ORIENTATION(menu, 0, 1);
 
 				float curX, curY, curZ;
@@ -715,7 +850,7 @@ mission TRAINER3S {
 			}
 		}
 	}
-
+/*
 	function set_up_draw(int type, float width, float height, int r, int g, int b, int a)
 	{
 		USE_TEXT_COMMANDS(true);
@@ -760,5 +895,5 @@ mission TRAINER3S {
 	function draw_float(short string gxtName, float x, float y, float val)
 	{
 		DISPLAY_TEXT_WITH_FLOAT(x, y, gxtName, val, 2);
-	}
+	}*/
 }
