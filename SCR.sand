@@ -80,8 +80,10 @@ mission TRAINER3S {
 
 	int last_selected[6];
 	Model menu_item_model[12];
+	int menu_item_int[12];
+	int upgrade_entry_id[12];
 	Car v_modding;
-	bool disable_menu, menu_items_set, menu_action, menu_incarcol, menu_next, menu_next2, menu_forward_pressed, menu_back_pressed;
+	bool disable_menu, menu_items_set, menu_action, menu_loadedshop, menu_incarcol, menu_next, menu_next2, menu_forward_pressed, menu_back_pressed;
 	//short string menu_header;
 
 	//menu_header = "TS_MAIN";
@@ -157,6 +159,274 @@ mission TRAINER3S {
 						}
 						else if (IS_CHAR_IN_ANY_CAR(playerActor))
 						{
+							if (subMenu == 2)
+							{
+								short string upgrade_items[12];
+								bool upgrade_slot[17];
+								upgrade_items[0] = "DUMMY";
+								upgrade_items[1] = "DUMMY";
+								upgrade_items[2] = "DUMMY";
+								upgrade_items[3] = "DUMMY";
+								upgrade_items[4] = "DUMMY";
+								upgrade_items[5] = "DUMMY";
+								upgrade_items[6] = "DUMMY";
+								upgrade_items[7] = "DUMMY";
+								upgrade_items[8] = "DUMMY";
+								upgrade_items[9] = "DUMMY";
+								upgrade_items[10] = "DUMMY";
+								upgrade_items[11] = "DUMMY";
+								upgrade_slot[0] = false;
+								upgrade_slot[1] = false;
+								upgrade_slot[2] = false;
+								upgrade_slot[3] = false;
+								upgrade_slot[4] = false;
+								upgrade_slot[5] = false;
+								upgrade_slot[5] = false;
+								upgrade_slot[6] = false;
+								upgrade_slot[7] = false;
+								upgrade_slot[8] = false;
+								upgrade_slot[9] = false;
+								upgrade_slot[10] = false;
+								upgrade_slot[11] = false;
+								upgrade_slot[12] = false;
+								upgrade_slot[13] = false;
+								upgrade_slot[14] = false;
+								upgrade_slot[15] = false;
+								upgrade_slot[16] = false;
+								int num_items = 0;
+
+								GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+								if (IS_CAR_LOW_RIDER(v_modding))
+								{
+									LOAD_SHOPPING_DATA_SUBSECTION("CARMOD2");
+									LOAD_SHOPPING_DATA_SECTION("CARMODS");
+								}
+								else if (IS_CAR_STREET_RACER(v_modding))
+								{
+									LOAD_SHOPPING_DATA_SUBSECTION("CARMOD3");
+									LOAD_SHOPPING_DATA_SECTION("CARMODS");
+								}
+								else
+								{
+									LOAD_SHOPPING_DATA_SUBSECTION("CARMOD1");
+									LOAD_SHOPPING_DATA_SECTION("CARMODS");
+								}
+								
+								menu_loadedshop = true;
+
+								if (GET_NUM_CAR_COLOURS(v_modding) != 0)
+								{
+									upgrade_items[num_items] = "CARM11";
+								}
+
+								int I, num_shopping_entry, shopping_entry_id, upgrade_model_slot;
+
+								GET_NUMBER_OF_SHOPPING_DATA_ENTRIES(num_shopping_entry);
+
+								for (I = 0; I <= num_shopping_entry;)
+								{
+									GET_SHOPPING_DATA_ENTRY_ITEM_ID(I, shopping_entry_id);
+									GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+
+									if (upgrade_model_slot == 0)
+									{
+										if (!upgrade_slot[0])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM3";
+											upgrade_entry_id[num_items] = 0;
+											upgrade_slot[0] = true;
+										}
+									}
+									else if (upgrade_model_slot == 1)
+									{
+										if (!upgrade_slot[1])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM17";
+											upgrade_entry_id[num_items] = 1;
+											upgrade_slot[1] = true;
+										}
+									}
+									else if (upgrade_model_slot == 2)
+									{
+										if (!upgrade_slot[2])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM2";
+											upgrade_entry_id[num_items] = 2;
+											upgrade_slot[2] = true;
+										}
+									}
+									else if (upgrade_model_slot == 3)
+									{
+										if (!upgrade_slot[3])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM4";
+											upgrade_entry_id[num_items] = 3;
+											upgrade_slot[3] = true;
+										}
+									}
+									else if (upgrade_model_slot == 4)
+									{
+										if (!upgrade_slot[4])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM13";
+											upgrade_entry_id[num_items] = 4;
+											upgrade_slot[4] = true;
+										}
+									}
+									else if (upgrade_model_slot == 5)
+									{
+										if (!upgrade_slot[5])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM14";
+											upgrade_entry_id[num_items] = 5;
+											upgrade_slot[5] = true;
+										}
+									}
+									else if (upgrade_model_slot == 6)
+									{
+										if (!upgrade_slot[6])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM9";
+											upgrade_entry_id[num_items] = 6;
+											upgrade_slot[6] = true;
+										}
+									}
+									else if (upgrade_model_slot == 7)
+									{
+										if (!upgrade_slot[7])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM10";
+											upgrade_entry_id[num_items] = 7;
+											upgrade_slot[7] = true;
+										}
+									}
+									else if (upgrade_model_slot == 8)
+									{
+										if (!upgrade_slot[8])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM6";
+											upgrade_entry_id[num_items] = 8;
+											upgrade_slot[8] = true;
+										}
+									}
+									else if (upgrade_model_slot == 9)
+									{
+										if (!upgrade_slot[9])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM18";
+											upgrade_entry_id[num_items] = 9;
+											upgrade_slot[9] = true;
+										}
+									}
+									else if (upgrade_model_slot == 10)
+									{
+										if (!upgrade_slot[10])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM16";
+											upgrade_entry_id[num_items] = 10;
+											upgrade_slot[10] = true;
+										}
+									}
+									else if (upgrade_model_slot == 12)
+									{
+										if (!upgrade_slot[12])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM12";
+											upgrade_entry_id[num_items] = 12;
+											upgrade_slot[12] = true;
+										}
+									}
+									else if (upgrade_model_slot == 13)
+									{
+										if (!upgrade_slot[13])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM5";
+											upgrade_entry_id[num_items] = 13;
+											upgrade_slot[13] = true;
+										}
+									}
+									else if (upgrade_model_slot == 14)
+									{
+										if (!upgrade_slot[14])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM7";
+											upgrade_entry_id[num_items] = 14;
+											upgrade_slot[14] = true;
+										}
+									}
+									else if (upgrade_model_slot == 15)
+									{
+										if (!upgrade_slot[15])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM8";
+											upgrade_entry_id[num_items] = 15;
+											upgrade_slot[15] = true;
+										}
+									}
+									else if (upgrade_model_slot == 16)
+									{
+										if (!upgrade_slot[16])
+										{
+											num_items = num_items + 1;
+											upgrade_items[num_items] = "CARM15";
+											upgrade_entry_id[num_items] = 16;
+											upgrade_slot[16] = true;
+										}
+									}
+									I = I + 1;
+								}
+								
+								/*SET_MENU_ITEM_WITH_NUMBER(menu, 0, 0, "DOLLAR", num_shopping_entry);
+
+								GET_SHOPPING_DATA_ENTRY_ITEM_ID(0, shopping_entry_id);
+								//long string shopping_data_name;
+								//GET_SHOPPING_DATA_ITEM_NAME(shopping_entry_id, shopping_data_name);
+								//SET_MENU_COLUMN(menu, 0, "DUMMY", shopping_data_name, "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+								GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+								
+								if (Unknown04a4(upgrade_model_slot, 7))
+								{
+									SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "PLA_10", 7);
+								}
+								else
+								{
+									SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "PLA_10", 1);
+								}*/
+
+								//GET_SHOPPING_DATA_ENTRY_ITEM_ID(1, shopping_entry_id);
+								//GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+								/*
+								SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 1, "PLA_10", shopping_entry_id, upgrade_model_slot);
+								
+								GET_SHOPPING_DATA_ENTRY_ITEM_ID(2, shopping_entry_id);
+								GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+								SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 2, "PLA_10", shopping_entry_id, upgrade_model_slot);
+								
+								GET_SHOPPING_DATA_ENTRY_ITEM_ID(3, shopping_entry_id);
+								GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+								SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 3, "PLA_10", shopping_entry_id, upgrade_model_slot);
+
+								GET_SHOPPING_DATA_ENTRY_ITEM_ID(4, shopping_entry_id);
+								GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+								SET_MENU_ITEM_WITH_2_NUMBERS(menu, 0, 4, "PLA_10", shopping_entry_id, upgrade_model_slot);*/
+
+								SET_MENU_COLUMN(menu, 0, "DUMMY", upgrade_items[0], upgrade_items[1], upgrade_items[2], upgrade_items[3], upgrade_items[4], upgrade_items[5], upgrade_items[6], upgrade_items[7], upgrade_items[8], upgrade_items[9], upgrade_items[10], upgrade_items[11]);
+							}
 							if (subMenu == 3)
 							{
 								SET_MENU_COLUMN(menu, 0, "DUMMY", "CARCOL1", "CARCOL2", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
@@ -194,6 +464,66 @@ mission TRAINER3S {
 							else if (last_selected[3] == 4)
 							{
 								SET_MENU_COLUMN(menu, 0, "DUMMY", "TS_TRIL", "TS_UVEH", "TS_RCVH", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY", "DUMMY");
+							}
+						}
+						else if (subMenu == 2)
+						{
+							GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+							if (GET_NUM_CAR_COLOURS(v_modding) != 0 && last_selected[3] == 1)
+							{
+								int I;
+								for (I = 0; I <= GET_NUM_CAR_COLOURS(v_modding);)
+								{
+									menu_action = true;
+									SET_MENU_ITEM_WITH_NUMBER(menu, 0, I, "PJOB", I);
+									I = I + 1;
+								}
+							}
+							else
+							{
+								int I, num_shopping_entry, shopping_entry_id, upgrade_model_slot;
+								int upgrade_slot = last_selected[3] - 1;
+								short string upgrade_items[12];
+								upgrade_items[0] = "DUMMY";
+								upgrade_items[1] = "DUMMY";
+								upgrade_items[2] = "DUMMY";
+								upgrade_items[3] = "DUMMY";
+								upgrade_items[4] = "DUMMY";
+								upgrade_items[5] = "DUMMY";
+								upgrade_items[6] = "DUMMY";
+								upgrade_items[7] = "DUMMY";
+								upgrade_items[8] = "DUMMY";
+								upgrade_items[9] = "DUMMY";
+								upgrade_items[10] = "DUMMY";
+								upgrade_items[11] = "DUMMY";
+								int num_items = 0;
+	
+								GET_NUMBER_OF_SHOPPING_DATA_ENTRIES(num_shopping_entry);
+	
+								for (I = 0; I <= num_shopping_entry;)
+								{
+									GET_SHOPPING_DATA_ENTRY_ITEM_ID(I, shopping_entry_id);
+									GET_UPGRADE_MODEL_SLOT(shopping_entry_id, upgrade_model_slot);
+	
+									if (upgrade_model_slot == upgrade_entry_id[upgrade_slot])
+									{
+										long string shopping_data_name;
+										GET_SHOPPING_DATA_ITEM_NAME(shopping_entry_id, shopping_data_name);
+										upgrade_items[num_items] = shopping_data_name;
+	
+										menu_action = true;
+										menu_item_int[num_items] = shopping_entry_id;
+	
+										num_items = num_items + 1;
+	
+										//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 0, "DOLLAR", I);
+										//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 1, "DOLLAR", num_items);
+										//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 2, "DOLLAR", shopping_entry_id);
+										//SET_MENU_ITEM_WITH_NUMBER(menu, 0, 3, "DOLLAR", upgrade_model_slot);
+									}
+									I = I + 1;
+								}
+								SET_MENU_COLUMN(menu, 0, "DUMMY", upgrade_items[0], upgrade_items[1], upgrade_items[2], upgrade_items[3], upgrade_items[4], upgrade_items[5], upgrade_items[6], upgrade_items[7], upgrade_items[8], upgrade_items[9], upgrade_items[10], upgrade_items[11]);
 							}
 						}
 						else if (subMenu == 3)
@@ -759,6 +1089,38 @@ mission TRAINER3S {
 								}
 							}
 						}
+						else if (subMenu == 2)
+						{
+							if (menu_level == 4)
+							{
+								GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+								if (GET_NUM_CAR_COLOURS(v_modding) != 0 && last_selected[3] == 1)
+								{
+									SET_CAR_LIVERY(v_modding, action_item_selected);
+								}
+								else
+								{
+									if (IS_MODEL_IN_CDIMAGE(menu_item_int[action_item_selected]))
+									{
+										int upgrade_model = menu_item_int[action_item_selected];
+										GET_CAR_CHAR_IS_USING(playerActor, v_modding);
+										//GET_CAR_UPGRADE_MODEL(v_modding, 10, upgrade_model);
+										REQUEST_VEHICLE_UPGRADE(upgrade_model);
+										LOAD_ALL_MODELS_NOW();
+	
+										if (!HAS_VEHICLE_UPGRADE_LOADED(upgrade_model))
+											WAIT(0);
+		
+										Car vere;
+										ADD_CAR_UPGRADE(v_modding, upgrade_model, vere);
+										MARK_VEHICLE_UPGRADE_AS_NO_LONGER_NEEDED(upgrade_model);
+		
+										//PLAY_AUDIO_EVENT(0, 0, 0, 1133);
+										//BUY_SHOPPING_ITEM(menu_item_int[action_item_selected]);
+									}
+								}
+							}
+						}
 						// Colour
 						else if (subMenu == 3)
 						{
@@ -785,6 +1147,13 @@ mission TRAINER3S {
 				menu_action = false;
 				menu_next = false;
 				menu_next2 = false;
+
+				// release shopping data if loaded
+				if (menu_loadedshop)
+				{
+					menu_loadedshop = false;
+					RELEASE_SHOPPING_DATA();
+				}
 
 				// re-create menu when in carcol
 				if (menu_incarcol)
